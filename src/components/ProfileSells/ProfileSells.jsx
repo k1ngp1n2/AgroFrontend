@@ -1,6 +1,6 @@
 import './ProfileSells.scss';
 
-import React, {Fragment, PureComponent} from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import MyOrdersIcon from '@material-ui/icons/DateRange';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -12,7 +12,7 @@ import LastPage from '@material-ui/icons/LastPage';
 import PropTypes from 'prop-types';
 
 import OrderItem from 'components/OrderItem';
-import {serverAddress} from 'constants/ServerAddress';
+import { serverAddress } from 'constants/ServerAddress';
 
 /**
  * Класс ProfileSells - компонент, отображающий заказы на странице продавца
@@ -20,7 +20,7 @@ import {serverAddress} from 'constants/ServerAddress';
 export default class ProfileSells extends PureComponent {
   constructor(props) {
     super(props);
-    
+
     // значения полей, используемых в render()
     this.state = {
       // Заказы
@@ -48,38 +48,37 @@ export default class ProfileSells extends PureComponent {
   };
 
   componentDidMount() {
-    const {jwtToken} = this.props;
+    const { jwtToken } = this.props;
     fetch(`${serverAddress}/api/member/orders?scope=pending`, {
       headers: {
-        'Authorization': `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     })
       .then(res => res.json())
-      .then(res => {
+      .then(
+        res => {
           let lastPage;
           if (res.result.pagination !== null)
             lastPage = res.result.pagination.last_page;
-          else
-            lastPage = 1;
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                orders: res.result,
-                itemsLoaded: true,
-                lastPage: lastPage,
-                nextPageEnable: lastPage > 1,
-                lastPageEnable: lastPage > 1,
-              };
-            }
-          );
+          else lastPage = 1;
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              orders: res.result,
+              itemsLoaded: true,
+              lastPage: lastPage,
+              nextPageEnable: lastPage > 1,
+              lastPageEnable: lastPage > 1,
+            };
+          });
         },
         error => {
           this.setState({
             itemsLoaded: true,
             error,
           });
-        });
+        },
+      );
   }
 
   showOrderInfo = id => {
@@ -88,7 +87,7 @@ export default class ProfileSells extends PureComponent {
   };
 
   handleChange = (event, value) => {
-    const {jwtToken} = this.props;
+    const { jwtToken } = this.props;
     let scope;
 
     switch (value) {
@@ -103,50 +102,47 @@ export default class ProfileSells extends PureComponent {
         break;
     }
 
-    this.setState(
-      prevState => {
-        return {
-          ...prevState,
-          itemsLoaded: false,
-          value: value,
-        };
-      }
-    );
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        itemsLoaded: false,
+        value: value,
+      };
+    });
 
     fetch(`${serverAddress}/api/member/orders?scope=${scope}`, {
       headers: {
-        'Authorization': `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     })
       .then(res => res.json())
-      .then(res => {
+      .then(
+        res => {
           let lastPage;
           if (res.result.pagination !== null)
             lastPage = res.result.pagination.last_page;
-          else
-            lastPage = 1;
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                orders: res.result,
-                itemsLoaded: true,
-                currentPage: 1,
-                lastPage: lastPage,
-                firstPageEnable: false,
-                prevPageEnable: false,
-                nextPageEnable: lastPage > 1,
-                lastPageEnable: lastPage > 1,
-              };
-            }
-          );
+          else lastPage = 1;
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              orders: res.result,
+              itemsLoaded: true,
+              currentPage: 1,
+              lastPage: lastPage,
+              firstPageEnable: false,
+              prevPageEnable: false,
+              nextPageEnable: lastPage > 1,
+              lastPageEnable: lastPage > 1,
+            };
+          });
         },
         error => {
           this.setState({
             itemsLoaded: true,
             error,
           });
-        });
+        },
+      );
   };
 
   changeList = page => {
@@ -166,140 +162,158 @@ export default class ProfileSells extends PureComponent {
         break;
     }
 
-    this.setState(
-      prevState => {
-        return {
-          ...prevState,
-          itemsLoaded: false,
-        };
-      }
-    );
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        itemsLoaded: false,
+      };
+    });
     fetch(`${serverAddress}/api/member/orders?scope=${scope}&page=${page}`, {
       headers: {
-        'Authorization': `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     })
       .then(res => res.json())
-      .then(res => {
+      .then(
+        res => {
           let lastPage;
           if (res.result.pagination !== null)
             lastPage = res.result.pagination.last_page;
-          else
-            lastPage = 1;
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                currentPage: page,
-                lastPage: lastPage,
-                firstPageEnable: page > 1,
-                prevPageEnable: page > 1,
-                nextPageEnable: page < lastPage,
-                lastPageEnable: page < lastPage,
-                orders: res.result,
-                itemsLoaded: true,
-              };
-            }
-          );
+          else lastPage = 1;
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              currentPage: page,
+              lastPage: lastPage,
+              firstPageEnable: page > 1,
+              prevPageEnable: page > 1,
+              nextPageEnable: page < lastPage,
+              lastPageEnable: page < lastPage,
+              orders: res.result,
+              itemsLoaded: true,
+            };
+          });
         },
         error => {
           this.setState({
             itemsLoaded: true,
             error,
           });
-        });
+        },
+      );
   };
 
   render() {
-    const { error, orders, itemsLoaded, value, currentPage, lastPage, firstPageEnable, prevPageEnable, nextPageEnable, lastPageEnable } = this.state;
+    const {
+      error,
+      orders,
+      itemsLoaded,
+      value,
+      currentPage,
+      lastPage,
+      firstPageEnable,
+      prevPageEnable,
+      nextPageEnable,
+      lastPageEnable,
+    } = this.state;
     let subcontent = '',
       scope = '',
       paginationButtons = '';
 
     if (lastPage > 1) {
       paginationButtons = (
-        <div className="pagination">
+        <div className='pagination'>
           <IconButton
             disabled={!firstPageEnable}
             onClick={() => this.changeList(1)}
           >
-            <FirstPage/>
+            <FirstPage />
           </IconButton>
           <IconButton
             disabled={!prevPageEnable}
             onClick={() => this.changeList(currentPage - 1)}
           >
-            <PrevPage/>
+            <PrevPage />
           </IconButton>
-          <span className="currentPage">
-            {currentPage}
-          </span>
+          <span className='currentPage'>{currentPage}</span>
           <IconButton
             disabled={!nextPageEnable}
             onClick={() => this.changeList(currentPage + 1)}
           >
-            <NextPage/>
+            <NextPage />
           </IconButton>
           <IconButton
             disabled={!lastPageEnable}
             onClick={() => this.changeList(lastPage)}
           >
-            <LastPage/>
+            <LastPage />
           </IconButton>
         </div>
       );
     }
     if (error) {
-      subcontent = <p className="load_info sell_orders_content">Ошибка: {error.message}</p>;
-    }
-    else
-      if (!itemsLoaded) {
-        subcontent = <p className="load_info sell_orders_content">Пожалуйста, подождите, идет загрузка страницы</p>;
-      }
-      else {
-        if (orders === undefined || orders.length === 0 || orders.orders === undefined || orders.orders.length === 0) {
-          switch (value) {
-            case 0:
-              scope = 'новые';
-              break;
-            case 1:
-              scope = 'доставляемые';
-              break;
-            case 2:
-              scope = 'выполненные';
-              break;
-          }
-          subcontent = <div className="load_info sell_orders_content">
-            <div/>
-            <p>У Вас отсутствуют {scope} заказы.</p>
-          </div>;
+      subcontent = (
+        <p className='load_info sell_orders_content'>Ошибка: {error.message}</p>
+      );
+    } else if (!itemsLoaded) {
+      subcontent = (
+        <p className='load_info sell_orders_content'>
+          Пожалуйста, подождите, идет загрузка страницы
+        </p>
+      );
+    } else {
+      if (
+        orders === undefined ||
+        orders.length === 0 ||
+        orders.orders === undefined ||
+        orders.orders.length === 0
+      ) {
+        switch (value) {
+          case 0:
+            scope = 'новые';
+            break;
+          case 1:
+            scope = 'доставляемые';
+            break;
+          case 2:
+            scope = 'выполненные';
+            break;
         }
-        else
-          subcontent = <div className="sell_orders_content">
+        subcontent = (
+          <div className='load_info sell_orders_content'>
+            <div />
+            <p>У Вас отсутствуют {scope} заказы.</p>
+          </div>
+        );
+      } else
+        subcontent = (
+          <div className='sell_orders_content'>
             {orders.orders.map((item, idx) => {
               return (
-                <OrderItem item={item} key={idx} showOrderInfo={this.showOrderInfo}/>
+                <OrderItem
+                  item={item}
+                  key={idx}
+                  showOrderInfo={this.showOrderInfo}
+                />
               );
             })}
-          </div>;
-      }
+          </div>
+        );
+    }
     const content = (
       <Fragment>
-        <Tabs
-          value={value}
-          onChange={this.handleChange}
-        >
-          <Tab label="Новые заказы"/>
-          <Tab label="Доставляемые заказы"/>
-          <Tab label="Выполненные заказы"/>
+        <Tabs value={value} onChange={this.handleChange}>
+          <Tab label='Новые заказы' />
+          <Tab label='Доставляемые заказы' />
+          <Tab label='Выполненные заказы' />
         </Tabs>
         {subcontent}
       </Fragment>
     );
     return (
-      <div className="seller_items">
-        <div className="seller_items_header">
-          <MyOrdersIcon className="my_orders_icon"/>
+      <div className='seller_items'>
+        <div className='seller_items_header'>
+          <MyOrdersIcon className='my_orders_icon' />
           <h2>Заказы</h2>
         </div>
         {content}

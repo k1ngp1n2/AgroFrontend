@@ -10,7 +10,7 @@ import LastPage from '@material-ui/icons/LastPage';
 import PropTypes from 'prop-types';
 
 import ProfileClient from 'components/ProfileClient';
-import {serverAddress} from 'constants/ServerAddress';
+import { serverAddress } from 'constants/ServerAddress';
 
 /**
  * Класс ProfileClients - компонент, отображающий клиентов на странице продавца
@@ -18,7 +18,7 @@ import {serverAddress} from 'constants/ServerAddress';
 export default class ProfileClients extends PureComponent {
   constructor(props) {
     super(props);
-    
+
     // значения полей, используемых в render()
     this.state = {
       // Клиенты
@@ -44,21 +44,20 @@ export default class ProfileClients extends PureComponent {
   };
 
   componentDidMount() {
-    const {jwtToken} = this.props;
+    const { jwtToken } = this.props;
     fetch(`${serverAddress}/api/member/consumers`, {
       headers: {
-        'Authorization': `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     })
       .then(res => res.json())
-      .then(res => {
-        let lastPage;
-        if (res.result.pagination !== null)
-          lastPage = res.result.pagination.last_page;
-        else
-          lastPage = 1;
-        this.setState(
-          prevState => {
+      .then(
+        res => {
+          let lastPage;
+          if (res.result.pagination !== null)
+            lastPage = res.result.pagination.last_page;
+          else lastPage = 1;
+          this.setState(prevState => {
             return {
               ...prevState,
               clients: res.result,
@@ -67,129 +66,149 @@ export default class ProfileClients extends PureComponent {
               nextPageEnable: lastPage > 1,
               lastPageEnable: lastPage > 1,
             };
-          }
-        );
-      },
-      error => {
-        this.setState({
-          itemsLoaded: true,
-          error,
-        });
-      });
-  }
-
-  changeList = page => {
-    const { jwtToken } = this.props;
-
-    this.setState(
-      prevState => {
-        return {
-          ...prevState,
-          itemsLoaded: false,
-        };
-      }
-    );
-    fetch(`${serverAddress}/api/member/consumers?page=${page}`, {
-      headers: {
-        'Authorization': `Bearer ${jwtToken}`,
-      },
-    })
-      .then(res => res.json())
-      .then(res => {
-          let lastPage;
-          if (res.result.pagination !== null)
-            lastPage = res.result.pagination.last_page;
-          else
-            lastPage = 1;
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                currentPage: page,
-                lastPage: lastPage,
-                firstPageEnable: page > 1,
-                prevPageEnable: page > 1,
-                nextPageEnable: page < lastPage,
-                lastPageEnable: page < lastPage,
-                clients: res.result,
-                itemsLoaded: true,
-              };
-            }
-          );
+          });
         },
         error => {
           this.setState({
             itemsLoaded: true,
             error,
           });
-        });
+        },
+      );
+  }
+
+  changeList = page => {
+    const { jwtToken } = this.props;
+
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        itemsLoaded: false,
+      };
+    });
+    fetch(`${serverAddress}/api/member/consumers?page=${page}`, {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    })
+      .then(res => res.json())
+      .then(
+        res => {
+          let lastPage;
+          if (res.result.pagination !== null)
+            lastPage = res.result.pagination.last_page;
+          else lastPage = 1;
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              currentPage: page,
+              lastPage: lastPage,
+              firstPageEnable: page > 1,
+              prevPageEnable: page > 1,
+              nextPageEnable: page < lastPage,
+              lastPageEnable: page < lastPage,
+              clients: res.result,
+              itemsLoaded: true,
+            };
+          });
+        },
+        error => {
+          this.setState({
+            itemsLoaded: true,
+            error,
+          });
+        },
+      );
   };
 
   render() {
-    const { error, clients, itemsLoaded, currentPage, lastPage, firstPageEnable, prevPageEnable, nextPageEnable, lastPageEnable } = this.state;
+    const {
+      error,
+      clients,
+      itemsLoaded,
+      currentPage,
+      lastPage,
+      firstPageEnable,
+      prevPageEnable,
+      nextPageEnable,
+      lastPageEnable,
+    } = this.state;
     const { itemHandle, getID } = this.props;
     let content = '',
       paginationButtons = '';
 
     if (lastPage > 1) {
       paginationButtons = (
-        <div className="pagination">
+        <div className='pagination'>
           <IconButton
             disabled={!firstPageEnable}
             onClick={() => this.changeList(1)}
           >
-            <FirstPage/>
+            <FirstPage />
           </IconButton>
           <IconButton
             disabled={!prevPageEnable}
             onClick={() => this.changeList(currentPage - 1)}
           >
-            <PrevPage/>
+            <PrevPage />
           </IconButton>
-          <span className="currentPage">
-            {currentPage}
-          </span>
+          <span className='currentPage'>{currentPage}</span>
           <IconButton
             disabled={!nextPageEnable}
             onClick={() => this.changeList(currentPage + 1)}
           >
-            <NextPage/>
+            <NextPage />
           </IconButton>
           <IconButton
             disabled={!lastPageEnable}
             onClick={() => this.changeList(lastPage)}
           >
-            <LastPage/>
+            <LastPage />
           </IconButton>
         </div>
       );
     }
     if (error) {
-      content = <p className="orders_content">Ошибка: {error.message}</p>;
-    }
-    else if (!itemsLoaded) {
-      content = <p className="load_info orders_content">Пожалуйста, подождите, идет загрузка страницы</p>;
-    }
-    else {
-      if (clients === undefined || clients.length === 0 || clients.consumers === undefined || clients.consumers.length === 0) {
-        content = <div className="load_info orders_content">
-          <div/>
-          <p>К сожалению у Вас еще не было покупателей.</p>
-        </div>;
-      }
-      else
-        content = <div className="orders_content">
-          {clients.consumers.map((item, idx) => {
-            return (
-              <ProfileClient item={item} key={idx} itemHandle={itemHandle} getID={getID}/>
-            );
-          })}
-        </div>;
+      content = <p className='orders_content'>Ошибка: {error.message}</p>;
+    } else if (!itemsLoaded) {
+      content = (
+        <p className='load_info orders_content'>
+          Пожалуйста, подождите, идет загрузка страницы
+        </p>
+      );
+    } else {
+      if (
+        clients === undefined ||
+        clients.length === 0 ||
+        clients.consumers === undefined ||
+        clients.consumers.length === 0
+      ) {
+        content = (
+          <div className='load_info orders_content'>
+            <div />
+            <p>К сожалению у Вас еще не было покупателей.</p>
+          </div>
+        );
+      } else
+        content = (
+          <div className='orders_content'>
+            {clients.consumers.map((item, idx) => {
+              return (
+                <ProfileClient
+                  item={item}
+                  key={idx}
+                  itemHandle={itemHandle}
+                  getID={getID}
+                />
+              );
+            })}
+          </div>
+        );
     }
     return (
-      <div className="seller_items">
-        <div className="seller_items_header">
-          <MyOrdersIcon className="my_orders_icon"/>
+      <div className='seller_items'>
+        <div className='seller_items_header'>
+          <MyOrdersIcon className='my_orders_icon' />
           <h2>Мои покупатели</h2>
         </div>
         {content}

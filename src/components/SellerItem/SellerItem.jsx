@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import DeleteIcon from '@material-ui/icons/DeleteOutlineRounded';
 import Button from '@material-ui/core/Button/Button';
 
-import {serverAddress} from 'constants/ServerAddress';
+import { serverAddress } from 'constants/ServerAddress';
 
 // Данные для кнопки Добавить объявление
 const editItemButton = {
@@ -46,38 +46,32 @@ export default class SellerItem extends PureComponent {
   render() {
     const { item, handleDeleteItem } = this.props;
     return (
-      <p className="seller_item">
-        <img
-          src={serverAddress + item.product.image}
-          alt="Товар"
-        />
-        <span className="item_name">
-          {item.product.title}
-        </span>
-        <span className="item_measures">
-          1 {item.product.measures}
-        </span>
-        <span className="item_price">
-          {item.product.price.toLocaleString('ru')} руб. / 1 {item.product.measures}
+      <p className='seller_item'>
+        <img src={serverAddress + item.product.image} alt='Товар' />
+        <span className='item_name'>{item.product.title}</span>
+        <span className='item_measures'>1 {item.product.measures}</span>
+        <span className='item_price'>
+          {item.product.price.toLocaleString('ru')} руб. / 1{' '}
+          {item.product.measures}
         </span>
         <Button
-          className="edit_button"
-          variant="contained"
-          color="primary"
+          className='edit_button'
+          variant='contained'
+          color='primary'
           id={editItemButton.id}
           onClick={() => this.editItem('edit_product', item.product.id)}
         >
           {editItemButton.name}
         </Button>
         <Button
-          className="delete_button"
-          variant="fab"
+          className='delete_button'
+          variant='fab'
           mini
-          color="secondary"
-          aria-label="Delete"
+          color='secondary'
+          aria-label='Delete'
           onClick={() => handleDeleteItem(item.product.id)}
         >
-          <DeleteIcon/>
+          <DeleteIcon />
         </Button>
       </p>
     );

@@ -2,26 +2,26 @@
 $k: 16;
 .about_page {
   display: grid;
-  background: url('../../imgs/grass.png') left bottom repeat-x;
+  background: url('../../img/grass.png') left bottom repeat-x;
   color: #33691e;
-  font-size: 14rem/$k;
+  font-size: 14rem / $k;
   font-weight: normal;
   grid-template-columns: 15% 40% 30% 15%;
-  min-height: 927rem/$k;
-  padding-top: 35rem/$k;
+  min-height: 700rem / $k;
+  padding-top: 35rem / $k;
   h2 {
     color: #588444;
-    font-size: 24rem/$k;
+    font-size: 24rem / $k;
   }
   p {
     margin-top: 0;
     margin-bottom: 0;
   }
   .info {
-    min-height: 550rem/$k;
+    min-height: 550rem / $k;
   }
   .bags {
-    background: url('../../imgs/bags.jpg') no-repeat center 74rem/$k;
+    background: url('../../img/bags.jpg') no-repeat center 74rem / $k;
   }
   @media (max-width: 1440px) {
     grid-template-columns: 5% 50% 40% 5%;

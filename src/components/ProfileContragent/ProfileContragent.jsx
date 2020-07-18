@@ -1,6 +1,6 @@
 import './ProfileContragent.scss';
 
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import MyOrdersIcon from '@material-ui/icons/DateRange';
 import PropTypes from 'prop-types';
 
@@ -29,19 +29,18 @@ export default class ProfileContragent extends PureComponent {
   };
 
   componentDidMount() {
-    const {id, getID} = this.props;
+    const { id, getID } = this.props;
     fetch(`${serverAddress}/api/members/${id}`)
       .then(res => res.json())
-      .then(res => {
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                profile: res.result.member,
-                itemsLoaded: true,
-              };
-            }
-          );
+      .then(
+        res => {
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              profile: res.result.member,
+              itemsLoaded: true,
+            };
+          });
           getID(-1);
         },
         error => {
@@ -49,7 +48,8 @@ export default class ProfileContragent extends PureComponent {
             itemsLoaded: true,
             error,
           });
-        });
+        },
+      );
   }
 
   render() {
@@ -60,69 +60,74 @@ export default class ProfileContragent extends PureComponent {
 
     if (error) {
       return <p>Ошибка: {error.message}</p>;
-    }
-    else
-    if (!itemsLoaded) {
-      return <p className="load_info">Пожалуйста, подождите, идет загрузка страницы</p>;
-    }
-    else {
+    } else if (!itemsLoaded) {
+      return (
+        <p className='load_info'>
+          Пожалуйста, подождите, идет загрузка страницы
+        </p>
+      );
+    } else {
       const mail = 'mailto:' + profile.email;
       switch (userType) {
         case buyer:
           phone = 'tel:+7-' + profile.phone;
-          content = <div className="user_profile_content">
-            <div className="user_avatar">
-              <img src={serverAddress+profile.image} alt="Аватар"/>
+          content = (
+            <div className='user_profile_content'>
+              <div className='user_avatar'>
+                <img src={serverAddress + profile.image} alt='Аватар' />
+              </div>
+              <div className='seller_profile'>
+                <span className='profile_name'>{profile.name}</span>
+                <span className='profile_address'>
+                  Адрес: {profile.address}
+                </span>
+                <span className='profile_phone'>
+                  Телефон: <a href={phone}>{profile.phone}</a>
+                </span>
+                <span className='profile_email'>
+                  Электронная почта:{' '}
+                  <code>
+                    <a href={mail}>{profile.email}</a>
+                  </code>
+                </span>
+              </div>
             </div>
-            <div className="seller_profile">
-              <span className="profile_name">
-                {profile.name}
-              </span>
-              <span className="profile_address">
-                Адрес: {profile.address}
-              </span>
-              <span className="profile_phone">
-                Телефон: <a href={phone}>{profile.phone}</a>
-              </span>
-              <span className="profile_email">
-                Электронная почта: <code><a href={mail}>{profile.email}</a></code>
-              </span>
-            </div>
-          </div>;
+          );
           description = 'покупателя';
           break;
         case seller:
           phone = 'tel:+7-' + profile.producer_phone;
-          content = <div className="user_profile_content">
-            <div className="user_avatar">
-              <img src={serverAddress+profile.producer_logo} alt="Аватар"/>
+          content = (
+            <div className='user_profile_content'>
+              <div className='user_avatar'>
+                <img src={serverAddress + profile.producer_logo} alt='Аватар' />
+              </div>
+              <div className='seller_profile'>
+                <span className='profile_name'>{profile.producer_brand}</span>
+                <span className='profile_inn'>ИНН {profile.producer_inn}</span>
+                <span className='profile_address'>
+                  Адрес: {profile.producer_address}
+                </span>
+                <span className='profile_phone'>
+                  Телефон: <a href={phone}>{profile.producer_phone}</a>
+                </span>
+                <span className='profile_email'>
+                  Электронная почта:{' '}
+                  <code>
+                    <a href={mail}>{profile.email}</a>
+                  </code>
+                </span>
+              </div>
             </div>
-            <div className="seller_profile">
-            <span className="profile_name">
-              {profile.producer_brand}
-            </span>
-            <span className="profile_inn">
-              ИНН {profile.producer_inn}
-            </span>
-            <span className="profile_address">
-              Адрес: {profile.producer_address}
-            </span>
-            <span className="profile_phone">
-              Телефон: <a href={phone}>{profile.producer_phone}</a>
-            </span>
-            <span className="profile_email">
-              Электронная почта: <code><a href={mail}>{profile.email}</a></code>
-            </span>
-            </div>
-          </div>;
+          );
           description = 'продавца';
           break;
       }
     }
     return (
-      <div className="seller_items">
-        <div className="seller_items_header">
-          <MyOrdersIcon className="my_orders_icon"/>
+      <div className='seller_items'>
+        <div className='seller_items_header'>
+          <MyOrdersIcon className='my_orders_icon' />
           <h2>Профиль {description}</h2>
         </div>
         {content}

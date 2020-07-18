@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
 // Данные для кнопки Найти
-const searchButton = {id: 'search', name: 'Найти'};
+const searchButton = { id: 'search', name: 'Найти' };
 
 /**
  * Класс SearchForm - компонент, отображающий на странице строку поиска товара
@@ -14,7 +14,7 @@ const searchButton = {id: 'search', name: 'Найти'};
 export default class SearchForm extends PureComponent {
   constructor(props) {
     super(props);
-    
+
     // значения полей, используемых в render()
     this.state = {
       // значение поля Товар по умолчанию
@@ -41,7 +41,7 @@ export default class SearchForm extends PureComponent {
   handleClick = () => {
     if (this.state.item !== '') {
       // получаем значение
-      const {onSend} = this.props;
+      const { onSend } = this.props;
 
       onSend(this.state.item);
     }
@@ -52,17 +52,25 @@ export default class SearchForm extends PureComponent {
     // получаем содержимое state
     const { item } = this.state;
     return (
-      <div className="searcher">
-        <input type="text" name="item" id="search_row" onChange={this.onChange} value={item} placeholder=' '/>
-        <label htmlFor="search_row">Введите название товара</label>
-        <span className="search_button">
-            <Button
-              variant="text"
-              id={searchButton.id}
-              onClick={this.handleClick}>
-                {searchButton.name}
-            </Button>
-          </span>
+      <div className='searcher'>
+        <input
+          type='text'
+          name='item'
+          id='search_row'
+          onChange={this.onChange}
+          value={item}
+          placeholder=' '
+        />
+        <label htmlFor='search_row'>Введите название товара</label>
+        <span className='search_button'>
+          <Button
+            variant='text'
+            id={searchButton.id}
+            onClick={this.handleClick}
+          >
+            {searchButton.name}
+          </Button>
+        </span>
       </div>
     );
   }

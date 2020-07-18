@@ -1,6 +1,6 @@
 import './ProfileMenu.scss';
 
-import React, { PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,7 +16,7 @@ import { buyer, seller, admin, delivery } from 'constants/AuthorizationTypes';
 export default class ProfileMenu extends PureComponent {
   constructor(props) {
     super(props);
-    
+
     // значения полей, используемых в render()
     this.state = {
       // при входе на страницу ни один из выбран раздел с товарами продавца
@@ -41,14 +41,12 @@ export default class ProfileMenu extends PureComponent {
    */
   handleListItemClick = (event, index, id) => {
     if (id !== 'seller_quit') {
-      this.setState(
-        prevState => {
-          return {
-            ...prevState,
-            section: index,
-          };
-        }
-      );
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          section: index,
+        };
+      });
       this.props.section(id);
     } else {
       this.props.handleLogout();
@@ -57,16 +55,17 @@ export default class ProfileMenu extends PureComponent {
 
   render() {
     const { userStatus } = this.props;
-    let content = menuItems.map( (item, idx) => {
+    let content = menuItems.map((item, idx) => {
       return (
-        <ListItem key={idx}
-                  button
-                  selected={this.state.section === idx}
-                  onClick={event => this.handleListItemClick(event, idx, item.id)}
-                  className="catalogMenuItem"
+        <ListItem
+          key={idx}
+          button
+          selected={this.state.section === idx}
+          onClick={event => this.handleListItemClick(event, idx, item.id)}
+          className='catalogMenuItem'
         >
-          <MyOrdersIcon/>
-          <ListItemText primary={item.name}/>
+          <MyOrdersIcon />
+          <ListItemText primary={item.name} />
         </ListItem>
       );
     });
@@ -88,7 +87,7 @@ export default class ProfileMenu extends PureComponent {
       content.splice(7, 1);
     }
     return (
-      <List component="nav" className="sellerMenu">
+      <List component='nav' className='sellerMenu'>
         {content}
       </List>
     );

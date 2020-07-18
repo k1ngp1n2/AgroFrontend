@@ -1,11 +1,11 @@
 import './LeftMenu.scss';
 
-import React, { PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import {serverAddress} from 'constants/ServerAddress';
+import { serverAddress } from 'constants/ServerAddress';
 
 /**
  * Класс LeftMenu - компонент, отображающий разделы каталога на странице каталога
@@ -23,14 +23,16 @@ export default class LeftMenu extends PureComponent {
   // Проверка свойств
   static propTypes = {
     // Пункты меню - массив объектов
-    menu: PropTypes.arrayOf(PropTypes.shape({
-      // id пункта
-      id:  PropTypes.number,
-      // название пункта
-      name: PropTypes.string,
-      // адрес
-      path: PropTypes.string,
-    })),
+    menu: PropTypes.arrayOf(
+      PropTypes.shape({
+        // id пункта
+        id: PropTypes.number,
+        // название пункта
+        name: PropTypes.string,
+        // адрес
+        path: PropTypes.string,
+      }),
+    ),
     // функция обратного вызова в родительский компонент
     section: PropTypes.func,
     searchResults: PropTypes.bool,
@@ -39,14 +41,12 @@ export default class LeftMenu extends PureComponent {
   componentDidUpdate(prevProps) {
     if (this.props.searchResults !== prevProps.searchResults)
       if (this.props.searchResults)
-        this.setState(
-          prevState => {
-            return {
-              ...prevState,
-              section: -1,
-            };
-          }
-        );
+        this.setState(prevState => {
+          return {
+            ...prevState,
+            section: -1,
+          };
+        });
   }
 
   // значения атрибутов по умолчанию
@@ -62,14 +62,12 @@ export default class LeftMenu extends PureComponent {
    * @param id, с которым выбранный пользователем раздел каталога хранится на сервере
    */
   handleListItemClick = (event, index, id) => {
-    this.setState(
-      prevState => {
-        return {
-          ...prevState,
-          section: index,
-        };
-      }
-    );
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        section: index,
+      };
+    });
     this.props.section(id);
   };
 
@@ -77,17 +75,25 @@ export default class LeftMenu extends PureComponent {
     // получаем переданные свойства меню
     const { menu } = this.props;
     return (
-      <List component="nav" className="leftMenu">
-        {menu.map( (item, idx) => {
+      <List component='nav' className='leftMenu'>
+        {menu.map((item, idx) => {
           return (
-            <ListItem key={idx}
+            <ListItem
+              key={idx}
               button
               selected={this.state.section === idx}
-              onClick={event => this.handleListItemClick(event, idx, item.category.id)}
-              className="catalogMenuItem"
+              onClick={event =>
+                this.handleListItemClick(event, idx, item.category.id)
+              }
+              className='catalogMenuItem'
             >
-              <span className="categoryIcon"><img src={serverAddress+item.category.icon} alt={item.category.name}/></span>
-              <ListItemText primary={item.category.name}/>
+              <span className='categoryIcon'>
+                <img
+                  src={serverAddress + item.category.icon}
+                  alt={item.category.name}
+                />
+              </span>
+              <ListItemText primary={item.category.name} />
             </ListItem>
           );
         })}

@@ -4,10 +4,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
-import {serverAddress} from 'constants/ServerAddress';
+import { serverAddress } from 'constants/ServerAddress';
 
 // Данные для кнопки Назад
-const backButton = {id: 'back', name: 'Назад'};
+const backButton = { id: 'back', name: 'Назад' };
 // Данные для кнопки Все товары производителя
 const showSellerCatalogButton = {
   id: 'open_products',
@@ -37,8 +37,6 @@ export default class CatalogProducer extends PureComponent {
     openedProducer: PropTypes.string,
     // Функция возврата в каталог из просмотра информации о производителе товара
     actionBack: PropTypes.func,
-    // ID корзины на сервере
-    basketID: PropTypes.string,
     showProducerCatalog: PropTypes.func,
     producerID: PropTypes.number,
   };
@@ -52,23 +50,23 @@ export default class CatalogProducer extends PureComponent {
   componentDidMount() {
     fetch(`${serverAddress}${this.props.openedProducer}`)
       .then(res => res.json())
-      .then(res => {
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                catalogProducer: res.result,
-                producerLoaded: true,
-              };
-            }
-          );
+      .then(
+        res => {
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              catalogProducer: res.result,
+              producerLoaded: true,
+            };
+          });
         },
         error => {
           this.setState({
             itemLoaded: true,
             error,
           });
-        });
+        },
+      );
   }
 
   render() {
@@ -77,55 +75,64 @@ export default class CatalogProducer extends PureComponent {
     const { actionBack, showProducerCatalog, producerID } = this.props;
     if (error) {
       return <p>CatalogProducer::Ошибка: {error.message}</p>;
-    }
-    else
-      if (!producerLoaded) {
-        return <p className="load_info">Пожалуйста, подождите, идет загрузка страницы</p>;
-      }
-      else {
-        const phone = 'tel:+7-' + catalogProducer.producer.phone;
-        const mail = 'mailto:' + catalogProducer.producer.email;
-        return (
-          <div className="producer_info">
-            <div className="producer_profile_content">
-              <div>
-                <h2 className="producer_title">Производитель товара: {catalogProducer.producer.name}</h2>
-                <p className="producer_region">
-                  Регион: {catalogProducer.producer.address}
-                </p>
-                  <p className="producer_phone">
-                  Телефон: <a href={phone}>{catalogProducer.producer.phone}</a>
-                </p>
-                <p className="producer_email">
-                  Электронная почта: <code><a href={mail}>{catalogProducer.producer.email}</a></code>
-                </p>
-              </div>
-              <div className="producer_logo">
-                <img src={serverAddress+catalogProducer.producer.logo} alt="Аватар"/>
-              </div>
+    } else if (!producerLoaded) {
+      return (
+        <p className='load_info'>
+          Пожалуйста, подождите, идет загрузка страницы
+        </p>
+      );
+    } else {
+      const phone = 'tel:+7-' + catalogProducer.producer.phone;
+      const mail = 'mailto:' + catalogProducer.producer.email;
+      return (
+        <div className='producer_info'>
+          <div className='producer_profile_content'>
+            <div>
+              <h2 className='producer_title'>
+                Производитель товара: {catalogProducer.producer.name}
+              </h2>
+              <p className='producer_region'>
+                Регион: {catalogProducer.producer.address}
+              </p>
+              <p className='producer_phone'>
+                Телефон: <a href={phone}>{catalogProducer.producer.phone}</a>
+              </p>
+              <p className='producer_email'>
+                Электронная почта:{' '}
+                <code>
+                  <a href={mail}>{catalogProducer.producer.email}</a>
+                </code>
+              </p>
             </div>
-            <div className="seller_catalog_button">
-              <Button
-                className="edit_button"
-                variant="contained"
-                color="primary"
-                id={showSellerCatalogButton.id}
-                onClick={() => showProducerCatalog(producerID)}
-              >
-                {showSellerCatalogButton.name}
-              </Button>
-            </div>
-            <div className="back_button">
-              <Button
-                color="primary"
-                id={backButton.id}
-                onClick={() => actionBack()}
-              >
-                {backButton.name}
-              </Button>
+            <div className='producer_logo'>
+              <img
+                src={serverAddress + catalogProducer.producer.logo}
+                alt='Аватар'
+              />
             </div>
           </div>
-        );
-      }
+          <div className='seller_catalog_button'>
+            <Button
+              className='edit_button'
+              variant='contained'
+              color='primary'
+              id={showSellerCatalogButton.id}
+              onClick={() => showProducerCatalog(producerID)}
+            >
+              {showSellerCatalogButton.name}
+            </Button>
+          </div>
+          <div className='back_button'>
+            <Button
+              color='primary'
+              id={backButton.id}
+              onClick={() => actionBack()}
+            >
+              {backButton.name}
+            </Button>
+          </div>
+        </div>
+      );
+    }
   }
 }

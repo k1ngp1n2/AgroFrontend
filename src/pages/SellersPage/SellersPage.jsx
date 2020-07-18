@@ -2,7 +2,7 @@ import './SellersPage.scss';
 
 import React, { PureComponent } from 'react';
 import Markdown from 'react-markdown';
-import {serverAddress} from 'constants/ServerAddress';
+import { serverAddress } from 'constants/ServerAddress';
 
 /**
  * Класс SellersPage - компонент, отображающий страницу Продавцам
@@ -21,23 +21,23 @@ export default class SellersPage extends PureComponent {
   componentDidMount() {
     fetch(`${serverAddress}/api/pages/sellers`)
       .then(res => res.json())
-      .then(res => {
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                pageContent: res.result.page.content,
-                contentLoaded: true,
-              };
-            }
-          );
+      .then(
+        res => {
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              pageContent: res.result.page.content,
+              contentLoaded: true,
+            };
+          });
         },
         error => {
           this.setState({
             contentLoaded: true,
             error,
           });
-        });
+        },
+      );
   }
 
   render() {
@@ -45,24 +45,22 @@ export default class SellersPage extends PureComponent {
 
     if (error) {
       return <p>Ошибка: {error.message}</p>;
-    }
-    else
-      if (!contentLoaded) {
-        return <p className="load_info">Пожалуйста, подождите, идет загрузка страницы</p>;
-      }
-      else {
-        return (
-          <div className="about_page">
-            <div/>
-            <div className="info">
-              <Markdown
-                escapeHtml={true}
-                source={pageContent}
-              />
-            </div>
-            <div className="bags"/>
+    } else if (!contentLoaded) {
+      return (
+        <p className='load_info'>
+          Пожалуйста, подождите, идет загрузка страницы
+        </p>
+      );
+    } else {
+      return (
+        <div className='about_page'>
+          <div />
+          <div className='info'>
+            <Markdown escapeHtml={true} source={pageContent} />
           </div>
-        );
-      }
+          <div className='bags' />
+        </div>
+      );
+    }
   }
 }

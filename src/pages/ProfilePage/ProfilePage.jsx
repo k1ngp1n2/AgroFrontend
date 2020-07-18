@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import ProfileMenu from 'components/ProfileMenu';
 import ProfileContent from 'components/ProfileContent';
-import {serverAddress} from 'constants/ServerAddress';
+import { serverAddress } from 'constants/ServerAddress';
 import { buyer } from 'constants/AuthorizationTypes';
 
 /**
@@ -39,28 +39,28 @@ export default class ProfilePage extends PureComponent {
 
     fetch(`${serverAddress}/api/member/profile`, {
       headers: {
-        'Authorization': `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     })
-         .then(res => res.json())
-         .then(res => {
-           this.setState(
-             prevState => {
-               return {
-                 ...prevState,
-                 // авторизация пользователя
-                 userStatus: res.result.member.user_type,
-                 profileLoaded: true,
-               };
-             }
-           );
-         },
-         error => {
-           this.setState({
-             profileLoaded: true,
-             error,
-           });
-         });
+      .then(res => res.json())
+      .then(
+        res => {
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              // авторизация пользователя
+              userStatus: res.result.member.user_type,
+              profileLoaded: true,
+            };
+          });
+        },
+        error => {
+          this.setState({
+            profileLoaded: true,
+            error,
+          });
+        },
+      );
   }
 
   /**
@@ -68,50 +68,47 @@ export default class ProfilePage extends PureComponent {
    * @param sectionID id выбранного пользователем раздела меню продавца
    */
   changeSection = sectionID => {
-    this.setState(
-      prevState => {
-        return {
-          ...prevState,
-          openedSection: sectionID,
-        };
-      }
-    );
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        openedSection: sectionID,
+      };
+    });
   };
 
   // Пользователь щелкает кнопку создания или редактирования товара, открытия заказа,
   // просмотра профиля покупателя, редактирования своего профиля
   itemHandle = itemID => {
-    this.setState(
-      prevState => {
-        return {
-          ...prevState,
-          openedSection: itemID,
-        };
-      }
-    );
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        openedSection: itemID,
+      };
+    });
   };
 
   render() {
     const { openedSection, userStatus, profileLoaded, error } = this.state;
-    const { handleLogout, jwtToken }  = this.props;
+    const { handleLogout, jwtToken } = this.props;
 
     if (error) {
       return <p>Ошибка: {error.message}</p>;
-    }
-    else
-    if (!profileLoaded) {
-      return <p className="load_info">Пожалуйста, подождите, идет загрузка страницы</p>;
-    }
-    else
+    } else if (!profileLoaded) {
       return (
-        <div className="seller_page">
-          <div/>
-          <h2 className="private_cab">Личный кабинет</h2>
-          <div/>
-          <div/>
-          <div/>
+        <p className='load_info'>
+          Пожалуйста, подождите, идет загрузка страницы
+        </p>
+      );
+    } else
+      return (
+        <div className='seller_page'>
+          <div />
+          <h2 className='private_cab'>Личный кабинет</h2>
+          <div />
+          <div />
+          <div />
           <ProfileMenu
-            className="seller_menu"
+            className='seller_menu'
             section={this.changeSection}
             handleLogout={handleLogout}
             userStatus={userStatus}
@@ -123,7 +120,7 @@ export default class ProfilePage extends PureComponent {
             newItemCreated={this.newItemCreated}
             userStatus={userStatus}
           />
-          <div/>
+          <div />
         </div>
       );
   }

@@ -1,11 +1,12 @@
+/* eslint-disable react/jsx-indent */
 import './App.scss';
 
-import React, { PureComponent} from 'react';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import React, { PureComponent } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Redirect } from 'react-router';
 // Сброс CSS для браузеров
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {MuiThemeProvider} from '@material-ui/core';
+import { MuiThemeProvider } from '@material-ui/core';
 // Тема для Material-UI
 import theme from '../../theme';
 import Header from 'components/Header';
@@ -15,8 +16,8 @@ import BasketPage from 'pages/BasketPage';
 import LoginPage from 'pages/LoginPage';
 // машрутизация сайта
 import routes from '../../routes';
-import {storageAvailable} from 'helpers/localStorage';
-import {serverAddress} from 'constants/ServerAddress';
+import { storageAvailable } from 'helpers/localStorage';
+import { serverAddress } from 'constants/ServerAddress';
 import ProfilePage from 'pages/ProfilePage';
 import RegisterPage from 'pages/RegisterPage';
 
@@ -52,30 +53,28 @@ export default class App extends PureComponent {
         this.loadBasketID(localStorage.getItem('basketID'));
       }
       if (localStorage.getItem('jwtToken') !== null) {
-        this.setState(
-          prevState => {
-            return {
-              ...prevState,
-              jwtToken: localStorage.getItem('jwtToken'),
-            };
-          }
-        );
+        this.setState(prevState => {
+          return {
+            ...prevState,
+            jwtToken: localStorage.getItem('jwtToken'),
+          };
+        });
       }
-    }
-    else
-      this.getBasketID();
+    } else this.getBasketID();
     // если доступен sessionStorage браузера
-    if (this.state.jwtToken === '' && storageAvailable('sessionStorage') && sessionStorage.getItem('jwtToken') !== null) {
-        this.setState(
-          prevState => {
-            return {
-              ...prevState,
-              jwtToken: sessionStorage.getItem('jwtToken'),
-            };
-          }
-        );
-      }
+    if (
+      this.state.jwtToken === '' &&
+      storageAvailable('sessionStorage') &&
+      sessionStorage.getItem('jwtToken') !== null
+    ) {
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          jwtToken: sessionStorage.getItem('jwtToken'),
+        };
+      });
     }
+  }
 
   // получает с сервера id новой корзины и сохраняет его в state
   getBasketID = () => {
@@ -83,25 +82,25 @@ export default class App extends PureComponent {
       method: 'post',
     })
       .then(res => res.json())
-      .then(res => {
-          this.setState(
-            prevState => {
-              if (storageAvailable('localStorage'))
-                localStorage.setItem('basketID', res.result.cart.id);
-              return {
-                ...prevState,
-                basketID: String(res.result.cart.id),
-                basketCreated: true,
-              };
-            }
-          );
+      .then(
+        res => {
+          this.setState(prevState => {
+            if (storageAvailable('localStorage'))
+              localStorage.setItem('basketID', res.result.cart.id);
+            return {
+              ...prevState,
+              basketID: String(res.result.cart.id),
+              basketCreated: true,
+            };
+          });
         },
         error => {
           this.setState({
             basketCreated: true,
             error,
           });
-        });
+        },
+      );
   };
 
   // проверяет наличие id корзины на сервере, в случае отсутствия получает с сервера id новой корзины и сохраняет его в state
@@ -113,82 +112,75 @@ export default class App extends PureComponent {
         if (res.status !== 200 || this.state.getBasketID === -1)
           // то получаем с сервера id для новой корзины
           this.getBasketID();
+        // иначе сохраняем переданный id корзины в state
         else
-          // иначе сохраняем переданный id корзины в state
-          this.setState(
-            prevState => {
-                return {
-                  ...prevState,
-                  basketID: id,
-                  basketCreated: true,
-                };
-            }
-          );
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              basketID: id,
+              basketCreated: true,
+            };
+          });
       });
   };
 
   // сохраняет jwt токен в браузере и в state
   setToken = (token, saveToken) => {
-    this.setState(
-      prevState => {
-        if (saveToken && storageAvailable('localStorage'))
-          localStorage.setItem('jwtToken', token);
-        else
-          if (storageAvailable('sessionStorage'))
-            sessionStorage.setItem('jwtToken', token);
-        return {
-          ...prevState,
-          jwtToken: token,
-        };
-      }
-    );
+    this.setState(prevState => {
+      if (saveToken && storageAvailable('localStorage'))
+        localStorage.setItem('jwtToken', token);
+      else if (storageAvailable('sessionStorage'))
+        sessionStorage.setItem('jwtToken', token);
+      return {
+        ...prevState,
+        jwtToken: token,
+      };
+    });
   };
 
   // удаляет jwt токен из браузера и из state
   handleLogout = () => {
-    this.setState(
-      prevState => {
-        if (storageAvailable('localStorage'))
-          localStorage.removeItem('jwtToken');
-        if (storageAvailable('sessionStorage'))
-          sessionStorage.removeItem('jwtToken');
-        return {
-          ...prevState,
-          jwtToken: '',
-        };
-      }
-    );
+    this.setState(prevState => {
+      if (storageAvailable('localStorage')) localStorage.removeItem('jwtToken');
+      if (storageAvailable('sessionStorage'))
+        sessionStorage.removeItem('jwtToken');
+      return {
+        ...prevState,
+        jwtToken: '',
+      };
+    });
   };
 
   render() {
     const { error, basketCreated, basketID, jwtToken } = this.state;
     if (error) {
       return <p>Ошибка: {error.message}</p>;
-    }
-    else
-    if (!basketCreated) {
-      return <p className="load_info">Пожалуйста, подождите, идет загрузка страницы</p>;
-    }
-    else {
+    } else if (!basketCreated) {
+      return (
+        <p className='load_info'>
+          Пожалуйста, подождите, идет загрузка страницы
+        </p>
+      );
+    } else {
       return (
         <MuiThemeProvider theme={theme}>
-          <CssBaseline/>
+          <CssBaseline />
           <BrowserRouter>
             <div>
-              <Header className="header" jwtToken={jwtToken}/>
-              <Switch className="page">
+              <Header className='header' jwtToken={jwtToken} />
+              <Switch className='page'>
                 <Route
                   exact
-                  path="/"
-                  render={props => (
-                    <HomePage {...props} basketID={basketID}/>
-                  )}
+                  path='/'
+                  render={props => <HomePage {...props} basketID={basketID} />}
                 />
-                {routes.map((route, idx) => <Route key={idx} basketID={basketID} {...route}/>)}
+                {routes.map((route, idx) => (
+                  <Route key={idx} basketID={basketID} {...route} />
+                ))}
                 <Route
                   exact
-                  path="/profile"
-                  render={props => (
+                  path='/profile'
+                  render={props =>
                     jwtToken !== '' ? (
                       <ProfilePage
                         {...props}
@@ -197,13 +189,13 @@ export default class App extends PureComponent {
                         jwtToken={jwtToken}
                       />
                     ) : (
-                      <Redirect to="/login"/>
+                      <Redirect to='/login' />
                     )
-                  )}
+                  }
                 />
                 <Route
                   exact
-                  path="/basket"
+                  path='/basket'
                   render={props => (
                     <BasketPage
                       {...props}
@@ -215,28 +207,38 @@ export default class App extends PureComponent {
                 />
                 <Route
                   exact
-                  path="/login"
-                  render={props => (
+                  path='/login'
+                  render={props =>
                     jwtToken === '' ? (
-                      <LoginPage {...props} basketID={basketID} setToken={this.setToken} jwtToken={jwtToken}/>
+                      <LoginPage
+                        {...props}
+                        basketID={basketID}
+                        setToken={this.setToken}
+                        jwtToken={jwtToken}
+                      />
                     ) : (
-                      <Redirect to="/profile"/>
+                      <Redirect to='/profile' />
                     )
-                  )}
+                  }
                 />
                 <Route
                   exact
-                  path="/register"
-                  render={props => (
+                  path='/register'
+                  render={props =>
                     jwtToken === '' ? (
-                      <RegisterPage {...props} basketID={basketID} setToken={this.setToken} jwtToken={jwtToken}/>
+                      <RegisterPage
+                        {...props}
+                        basketID={basketID}
+                        setToken={this.setToken}
+                        jwtToken={jwtToken}
+                      />
                     ) : (
-                      <Redirect to="/profile"/>
+                      <Redirect to='/profile' />
                     )
-                  )}
+                  }
                 />
               </Switch>
-              <Footer/>
+              <Footer />
             </div>
           </BrowserRouter>
         </MuiThemeProvider>

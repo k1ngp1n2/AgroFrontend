@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button/Button';
 import moment from 'moment';
 
 import OrderStatus from 'components/OrderStatus/OrderStatus';
-import {serverAddress} from 'constants/ServerAddress';
+import { serverAddress } from 'constants/ServerAddress';
 
 // Данные для кнопки Заказ доставлен
 const orderDoneButton = {
@@ -22,7 +22,7 @@ const orderDoneButton = {
 export default class DeliveryOrder extends PureComponent {
   constructor(props) {
     super(props);
-    
+
     // значения полей, используемых в render()
     this.state = {
       order: {},
@@ -41,72 +41,70 @@ export default class DeliveryOrder extends PureComponent {
     const { id, jwtToken } = this.props;
     fetch(`${serverAddress}/api/carrier/tasks/${id}`, {
       headers: {
-        'Authorization': `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     })
       .then(res => res.json())
-      .then(res => {
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                order: res.result.task,
-                itemsLoaded: true,
-                orderStatus: res.result.task.status,
-              };
-            }
-          );
+      .then(
+        res => {
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              order: res.result.task,
+              itemsLoaded: true,
+              orderStatus: res.result.task.status,
+            };
+          });
         },
         error => {
           this.setState({
             itemsLoaded: true,
             error,
           });
-        });
+        },
+      );
   }
 
   orderDone = () => {
     const statusJSON = JSON.stringify({
-      'task': {
-        'status': 'Доставлен',
+      task: {
+        status: 'Доставлен',
       },
     });
     const { id, jwtToken } = this.props;
 
-    this.setState(
-      prevState => {
-        return {
-          ...prevState,
-          orderStatus: 'Обработка данных',
-        };
-      }
-    );
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        orderStatus: 'Обработка данных',
+      };
+    });
 
     fetch(`${serverAddress}/api/carrier/tasks/${id}`, {
       method: 'put',
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
       body: statusJSON,
     })
       .then(res => res.json())
-      .then(res => {
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                orderStatus: res.result.task.status,
-              };
-            }
-          );
+      .then(
+        res => {
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              orderStatus: res.result.task.status,
+            };
+          });
         },
         error => {
           this.setState({
             error,
           });
-        });
+        },
+      );
   };
 
   render() {
@@ -116,55 +114,71 @@ export default class DeliveryOrder extends PureComponent {
 
     if (error) {
       return <p>Ошибка: {error.message}</p>;
-    }
-    else if (!itemsLoaded) {
-      return <p className="load_info">Пожалуйста, подождите, идет загрузка страницы</p>;
-    }
-    else {
+    } else if (!itemsLoaded) {
+      return (
+        <p className='load_info'>
+          Пожалуйста, подождите, идет загрузка страницы
+        </p>
+      );
+    } else {
       let orderDone = '';
-      if (orderStatus !== 'Доставлен')
-      {
-        orderDone = <p>
-          <Button
-            className="orderDone"
-            variant="contained"
-            color="primary"
-            id={orderDoneButton.id}
-            onClick={() => this.orderDone()}
-          >
-            {orderDoneButton.name}
-          </Button>
-        </p>;
+      if (orderStatus !== 'Доставлен') {
+        orderDone = (
+          <p>
+            <Button
+              className='orderDone'
+              variant='contained'
+              color='primary'
+              id={orderDoneButton.id}
+              onClick={() => this.orderDone()}
+            >
+              {orderDoneButton.name}
+            </Button>
+          </p>
+        );
       }
       return (
-        <div className="seller_items order_info">
-          <div className="seller_items_header">
-            <MyOrdersIcon className="my_orders_icon"/>
+        <div className='seller_items order_info'>
+          <div className='seller_items_header'>
+            <MyOrdersIcon className='my_orders_icon' />
             <h2>Сведения о заказе на доставку</h2>
           </div>
-          <div className="delivery_order_info">
-            <p className="delivery_header">Заказ № {order.id} от {moment(order.ask_start).format('LL')}</p>
-            <div className="delivery_order">
-              <div className="client_contacts">
-                <p className="client_name">Грузополучатель: {order.consumer_name}</p>
+          <div className='delivery_order_info'>
+            <p className='delivery_header'>
+              Заказ № {order.id} от {moment(order.ask_start).format('LL')}
+            </p>
+            <div className='delivery_order'>
+              <div className='client_contacts'>
+                <p className='client_name'>
+                  Грузополучатель: {order.consumer_name}
+                </p>
                 <p>Адрес грузополучателя: {order.consumer_address}</p>
                 <p>Телефон грузополучателя {order.consumer_phone}</p>
               </div>
-              <OrderStatus orderStatus={orderStatus}/>
+              <OrderStatus orderStatus={orderStatus} />
               {orderDone}
-              <div className="client_contacts">
-                <p>Сведения о грузоотправител{order.ask.ask.orders.length > 1 ? 'ях' : 'е'}:</p>
+              <div className='client_contacts'>
+                <p>
+                  Сведения о грузоотправител
+                  {order.ask.ask.orders.length > 1 ? 'ях' : 'е'}:
+                </p>
               </div>
               {order.ask.ask.orders.map((item, idx) => {
                 return (
-                  <div className="client_contacts" key={idx}>
-                    <p className="client_name">{order.ask.ask.orders.length > 1 ? idx+1+'. ' : ''}Грузоотправитель: {item.order.producer_name}</p>
+                  <div className='client_contacts' key={idx}>
+                    <p className='client_name'>
+                      {order.ask.ask.orders.length > 1 ? idx + 1 + '. ' : ''}
+                      Грузоотправитель: {item.order.producer_name}
+                    </p>
                     <p>Адрес грузоотправителя: {item.order.producer_address}</p>
                     <p>Телефон грузоотправителя: {item.order.producer_phone}</p>
                   </div>
                 );
               })}
-              <p>Стоимость доставки {order.delivery_cost.toLocaleString('ru') + rub}</p>
+              <p>
+                Стоимость доставки{' '}
+                {order.delivery_cost.toLocaleString('ru') + rub}
+              </p>
             </div>
           </div>
         </div>

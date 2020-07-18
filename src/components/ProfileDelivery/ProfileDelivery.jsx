@@ -1,6 +1,6 @@
 import './ProfileDelivery.scss';
 
-import React, {Fragment, PureComponent} from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import MyOrdersIcon from '@material-ui/icons/DateRange';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -12,7 +12,7 @@ import LastPage from '@material-ui/icons/LastPage';
 import PropTypes from 'prop-types';
 
 import DeliveryItem from 'components/DeliveryItem';
-import {serverAddress} from 'constants/ServerAddress';
+import { serverAddress } from 'constants/ServerAddress';
 
 /**
  * Класс ProfileDelivery - компонент, отображающий список заказов на доставку
@@ -20,7 +20,7 @@ import {serverAddress} from 'constants/ServerAddress';
 export default class ProfileDelivery extends PureComponent {
   constructor(props) {
     super(props);
-    
+
     // значения полей, используемых в render()
     this.state = {
       // Заказы
@@ -48,21 +48,20 @@ export default class ProfileDelivery extends PureComponent {
   };
 
   componentDidMount() {
-    const {jwtToken} = this.props;
+    const { jwtToken } = this.props;
     fetch(`${serverAddress}/api/carrier/tasks?scope=waiting`, {
       headers: {
-        'Authorization': `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     })
       .then(res => res.json())
-      .then(res => {
-        let lastPage;
-        if (res.result.pagination !== null)
-          lastPage = res.result.pagination.last_page;
-        else
-          lastPage = 1;
-        this.setState(
-          prevState => {
+      .then(
+        res => {
+          let lastPage;
+          if (res.result.pagination !== null)
+            lastPage = res.result.pagination.last_page;
+          else lastPage = 1;
+          this.setState(prevState => {
             return {
               ...prevState,
               orders: res.result,
@@ -71,15 +70,15 @@ export default class ProfileDelivery extends PureComponent {
               nextPageEnable: lastPage > 1,
               lastPageEnable: lastPage > 1,
             };
-          }
-        );
-      },
-      error => {
-        this.setState({
-          itemsLoaded: true,
-          error,
-        });
-      });
+          });
+        },
+        error => {
+          this.setState({
+            itemsLoaded: true,
+            error,
+          });
+        },
+      );
   }
 
   showOrderInfo = id => {
@@ -88,7 +87,7 @@ export default class ProfileDelivery extends PureComponent {
   };
 
   handleChange = (event, value) => {
-    const {jwtToken} = this.props;
+    const { jwtToken } = this.props;
     let scope;
 
     switch (value) {
@@ -100,50 +99,47 @@ export default class ProfileDelivery extends PureComponent {
         break;
     }
 
-    this.setState(
-      prevState => {
-        return {
-          ...prevState,
-          itemsLoaded: false,
-          value: value,
-        };
-      }
-    );
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        itemsLoaded: false,
+        value: value,
+      };
+    });
 
     fetch(`${serverAddress}/api/carrier/tasks?scope=${scope}`, {
       headers: {
-        'Authorization': `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     })
       .then(res => res.json())
-      .then(res => {
+      .then(
+        res => {
           let lastPage;
           if (res.result.pagination !== null)
             lastPage = res.result.pagination.last_page;
-          else
-            lastPage = 1;
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                orders: res.result,
-                itemsLoaded: true,
-                currentPage: 1,
-                lastPage: lastPage,
-                firstPageEnable: false,
-                prevPageEnable: false,
-                nextPageEnable: lastPage > 1,
-                lastPageEnable: lastPage > 1,
-              };
-            }
-          );
+          else lastPage = 1;
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              orders: res.result,
+              itemsLoaded: true,
+              currentPage: 1,
+              lastPage: lastPage,
+              firstPageEnable: false,
+              prevPageEnable: false,
+              nextPageEnable: lastPage > 1,
+              lastPageEnable: lastPage > 1,
+            };
+          });
         },
         error => {
           this.setState({
             itemsLoaded: true,
             error,
           });
-        });
+        },
+      );
   };
 
   changeList = page => {
@@ -160,98 +156,112 @@ export default class ProfileDelivery extends PureComponent {
         break;
     }
 
-    this.setState(
-      prevState => {
-        return {
-          ...prevState,
-          itemsLoaded: false,
-        };
-      }
-    );
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        itemsLoaded: false,
+      };
+    });
     fetch(`${serverAddress}/api/carrier/tasks?scope=${scope}&page=${page}`, {
       headers: {
-        'Authorization': `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     })
       .then(res => res.json())
-      .then(res => {
+      .then(
+        res => {
           let lastPage;
           if (res.result.pagination !== null)
             lastPage = res.result.pagination.last_page;
-          else
-            lastPage = 1;
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                currentPage: page,
-                lastPage: lastPage,
-                firstPageEnable: page > 1,
-                prevPageEnable: page > 1,
-                nextPageEnable: page < lastPage,
-                lastPageEnable: page < lastPage,
-                orders: res.result,
-                itemsLoaded: true,
-              };
-            }
-          );
+          else lastPage = 1;
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              currentPage: page,
+              lastPage: lastPage,
+              firstPageEnable: page > 1,
+              prevPageEnable: page > 1,
+              nextPageEnable: page < lastPage,
+              lastPageEnable: page < lastPage,
+              orders: res.result,
+              itemsLoaded: true,
+            };
+          });
         },
         error => {
           this.setState({
             itemsLoaded: true,
             error,
           });
-        });
+        },
+      );
   };
 
   render() {
-    const { error, orders, itemsLoaded, value, currentPage, lastPage, firstPageEnable, prevPageEnable, nextPageEnable, lastPageEnable } = this.state;
+    const {
+      error,
+      orders,
+      itemsLoaded,
+      value,
+      currentPage,
+      lastPage,
+      firstPageEnable,
+      prevPageEnable,
+      nextPageEnable,
+      lastPageEnable,
+    } = this.state;
     let subcontent = '',
       scope = '',
       paginationButtons = '';
 
     if (lastPage > 1) {
       paginationButtons = (
-        <div className="pagination">
+        <div className='pagination'>
           <IconButton
             disabled={!firstPageEnable}
             onClick={() => this.changeList(1)}
           >
-            <FirstPage/>
+            <FirstPage />
           </IconButton>
           <IconButton
             disabled={!prevPageEnable}
             onClick={() => this.changeList(currentPage - 1)}
           >
-            <PrevPage/>
+            <PrevPage />
           </IconButton>
-          <span className="currentPage">
-            {currentPage}
-          </span>
+          <span className='currentPage'>{currentPage}</span>
           <IconButton
             disabled={!nextPageEnable}
             onClick={() => this.changeList(currentPage + 1)}
           >
-            <NextPage/>
+            <NextPage />
           </IconButton>
           <IconButton
             disabled={!lastPageEnable}
             onClick={() => this.changeList(lastPage)}
           >
-            <LastPage/>
+            <LastPage />
           </IconButton>
         </div>
       );
     }
     if (error) {
-      subcontent = <p className="load_info sell_orders_content">Ошибка: {error.message}</p>;
-    }
-    else
-    if (!itemsLoaded) {
-      subcontent = <p className="load_info sell_orders_content">Пожалуйста, подождите, идет загрузка страницы</p>;
-    }
-    else {
-      if (orders === undefined || orders.length === 0 || orders.tasks === undefined || orders.tasks.length === 0) {
+      subcontent = (
+        <p className='load_info sell_orders_content'>Ошибка: {error.message}</p>
+      );
+    } else if (!itemsLoaded) {
+      subcontent = (
+        <p className='load_info sell_orders_content'>
+          Пожалуйста, подождите, идет загрузка страницы
+        </p>
+      );
+    } else {
+      if (
+        orders === undefined ||
+        orders.length === 0 ||
+        orders.tasks === undefined ||
+        orders.tasks.length === 0
+      ) {
         switch (value) {
           case 0:
             scope = 'не доставленные';
@@ -260,36 +270,40 @@ export default class ProfileDelivery extends PureComponent {
             scope = 'доставленные';
             break;
         }
-        subcontent = <div className="load_info sell_orders_content">
-          <div/>
-          <p>У Вас отсутствуют {scope} заказы.</p>
-        </div>;
-      }
-      else
-        subcontent = <div className="sell_orders_content">
-          {orders.tasks.map((item, idx) => {
-          return (
-            <DeliveryItem item={item} key={idx} showOrderInfo={this.showOrderInfo}/>
-          );
-        })}
-        </div>;
+        subcontent = (
+          <div className='load_info sell_orders_content'>
+            <div />
+            <p>У Вас отсутствуют {scope} заказы.</p>
+          </div>
+        );
+      } else
+        subcontent = (
+          <div className='sell_orders_content'>
+            {orders.tasks.map((item, idx) => {
+              return (
+                <DeliveryItem
+                  item={item}
+                  key={idx}
+                  showOrderInfo={this.showOrderInfo}
+                />
+              );
+            })}
+          </div>
+        );
     }
-  const content = (
-    <Fragment>
-      <Tabs
-        value={value}
-        onChange={this.handleChange}
-      >
-        <Tab label="Ожидают доставки"/>
-        <Tab label="Доставлено"/>
-      </Tabs>
-      {subcontent}
-    </Fragment>
-  );
-  return (
-      <div className="seller_items">
-        <div className="seller_items_header">
-          <MyOrdersIcon className="my_orders_icon"/>
+    const content = (
+      <Fragment>
+        <Tabs value={value} onChange={this.handleChange}>
+          <Tab label='Ожидают доставки' />
+          <Tab label='Доставлено' />
+        </Tabs>
+        {subcontent}
+      </Fragment>
+    );
+    return (
+      <div className='seller_items'>
+        <div className='seller_items_header'>
+          <MyOrdersIcon className='my_orders_icon' />
           <h2>Заказы на доставку</h2>
         </div>
         {content}

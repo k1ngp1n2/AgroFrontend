@@ -22,19 +22,19 @@ header {
   }
 }
 .goto_main {
-  background: url('../../imgs/logo.png') no-repeat;
+  background: url('../../img/logo.png') no-repeat;
   background-size: 304px 75px;
   height: 75px;
   width: 304px;
   @media (max-width: 1920px) {
-    background-size: 215rem/$k 53rem/$k;
+    background-size: 215rem / $k 53rem / $k;
     height: 53px;
     width: 215px;
     margin-top: 12px;
   }
 }
 .menu_buttons {
-  padding-top: 23em/$k;
+  padding-top: 23em / $k;
   text-align: right;
 }
 .basket_button {

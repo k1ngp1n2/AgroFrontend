@@ -1,18 +1,18 @@
 import './BasketPage.scss';
 
 import React, { PureComponent } from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button/Button';
 import BasketList from 'components/BasketList';
 import BasketContacts from 'components/BasketContacts';
 import BasketFinish from 'components/BasketFinish';
-import {serverAddress} from 'constants/ServerAddress';
-import {register} from 'helpers/register';
-import {login} from 'helpers/login';
-import {order} from 'helpers/order';
+import { serverAddress } from 'constants/ServerAddress';
+import { register } from 'helpers/register';
+import { login } from 'helpers/login';
+import { order } from 'helpers/order';
 
-const linkToLogin = props => <Link to="/login" {...props}/>;
+const linkToLogin = props => <Link to='/login' {...props} />;
 
 // Данные для кнопки Вернуться в корзину
 const backToBasketButton = {
@@ -61,24 +61,24 @@ export default class BasketPage extends PureComponent {
   componentDidMount() {
     fetch(`${serverAddress}/api/carts/${this.props.basketID}`)
       .then(res => res.json())
-      .then(res => {
-          this.setState(
-            prevState => {
-              return {
-                ...prevState,
-                basketItems: res.result.cart,
-                basketLoaded: true,
-                deliveryCost: res.result.cart.delivery_cost,
-              };
-            }
-          );
+      .then(
+        res => {
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              basketItems: res.result.cart,
+              basketLoaded: true,
+              deliveryCost: res.result.cart.delivery_cost,
+            };
+          });
         },
         error => {
           this.setState({
             basketLoaded: true,
             error,
           });
-        });
+        },
+      );
   }
 
   /**
@@ -87,34 +87,38 @@ export default class BasketPage extends PureComponent {
    * @param count количество добавляемого товара
    */
   handleCounterClick = (item_number, count) => {
-    if (count === -1 && this.state.basketItems.cart_items[item_number].cart_item.quantity === 1)
+    if (
+      count === -1 &&
+      this.state.basketItems.cart_items[item_number].cart_item.quantity === 1
+    )
       return;
     const itemJSON = JSON.stringify({
-      'cart_item':
-        {
-          'quantity': this.state.basketItems.cart_items[item_number].cart_item.quantity + count,
-        },
-    });
-    fetch(`${serverAddress}/api/carts/${this.props.basketID}/cart_items/${this.state.basketItems.cart_items[item_number].cart_item.id}`, {
-      method: 'put',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+      cart_item: {
+        quantity:
+          this.state.basketItems.cart_items[item_number].cart_item.quantity +
+          count,
       },
-      body: itemJSON,
-    })
-      .then(() => {
-        const newBasketItems = Object.assign({}, this.state.basketItems);
-        newBasketItems.cart_items[item_number].cart_item.quantity += count;
-        this.setState(
-          prevState => {
-            return {
-              ...prevState,
-              basketItems: newBasketItems,
-            };
-          }
-        );
+    });
+    fetch(
+      `${serverAddress}/api/carts/${this.props.basketID}/cart_items/${this.state.basketItems.cart_items[item_number].cart_item.id}`,
+      {
+        method: 'put',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: itemJSON,
+      },
+    ).then(() => {
+      const newBasketItems = Object.assign({}, this.state.basketItems);
+      newBasketItems.cart_items[item_number].cart_item.quantity += count;
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          basketItems: newBasketItems,
+        };
       });
+    });
   };
 
   // обработка щелчков по кнопке Удалить товар
@@ -122,21 +126,21 @@ export default class BasketPage extends PureComponent {
     const { basketItems } = this.state;
     const { basketID } = this.props;
 
-    fetch(`${serverAddress}/api/carts/${basketID}/cart_items/${basketItems.cart_items[item_number].cart_item.id}`, {
-      method: 'delete',
-    })
-      .then(() => {
-        const newBasketItems = Object.assign({}, basketItems);
-        newBasketItems.cart_items.splice(item_number, 1);
-        this.setState(
-          prevState => {
-            return {
-              ...prevState,
-              basketItems: newBasketItems,
-            };
-          }
-        );
+    fetch(
+      `${serverAddress}/api/carts/${basketID}/cart_items/${basketItems.cart_items[item_number].cart_item.id}`,
+      {
+        method: 'delete',
+      },
+    ).then(() => {
+      const newBasketItems = Object.assign({}, basketItems);
+      newBasketItems.cart_items.splice(item_number, 1);
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          basketItems: newBasketItems,
+        };
       });
+    });
   };
 
   /**
@@ -154,36 +158,37 @@ export default class BasketPage extends PureComponent {
           // Очищаем корзину
           fetch(`${serverAddress}/api/carts/${basketID}`, {
             method: 'delete',
-          })
-            .then(() => {
-              this.setState(
-                prevState => {
-                  return {
-                    ...prevState,
-                    orderFinish: true,
-                  };
-                }
-              );
-            });
-        }
-        else
-          this.setState(
-            prevState => {
+          }).then(() => {
+            this.setState(prevState => {
               return {
                 ...prevState,
-                noMoney: true,
-                needMoney: res.result.need_money,
+                orderFinish: true,
               };
-            }
-          );
+            });
+          });
+        } else
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              noMoney: true,
+              needMoney: res.result.need_money,
+            };
+          });
       });
   };
 
   handleOrderClick = user => {
     const { setToken, jwtToken } = this.props;
 
-    if(jwtToken === '') {
-      register(serverAddress, user.email, user.password, user.name, user.phone, user.address)
+    if (jwtToken === '') {
+      register(
+        serverAddress,
+        user.email,
+        user.password,
+        user.name,
+        user.phone,
+        user.address,
+      )
         .then(res => res.json())
         .then(() => {
           login(serverAddress, user.email, user.password)
@@ -199,92 +204,102 @@ export default class BasketPage extends PureComponent {
   };
 
   reset = () => {
-    this.setState(
-      prevState => {
-        return {
-          ...prevState,
-          noMoney: false,
-          needMoney: 0,
-        };
-      }
-    );
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        noMoney: false,
+        needMoney: 0,
+      };
+    });
   };
 
   render() {
-    const { error, basketItems, basketLoaded, orderFinish, noMoney, needMoney, deliveryCost } = this.state;
+    const {
+      error,
+      basketItems,
+      basketLoaded,
+      orderFinish,
+      noMoney,
+      needMoney,
+      deliveryCost,
+    } = this.state;
     const { basketID, jwtToken } = this.props;
 
     if (orderFinish)
       return (
-        <div className="basket_finish">
-          <div/>
-          <BasketFinish/>
-          <div/>
+        <div className='basket_finish'>
+          <div />
+          <BasketFinish />
+          <div />
         </div>
       );
-    else
-      if (error) {
-        return <p>Ошибка: {error.message}</p>;
-      }
-      else
-        if (!basketLoaded) {
-          return <p className="load_info">Пожалуйста, подождите, идет загрузка страницы</p>;
-        }
-        else
-          if (basketItems === undefined || basketItems.length === 0 || basketItems.cart_items === undefined || basketItems.cart_items.length === 0) {
-            return (
-            <div className="load_info">
-              <div/>
-              <p>Ваша корзина пуста</p>
-            </div>
-            );
-          }
-          else
-            if (noMoney) {
-              return (
-                <div className="no_money">
-                  <p>Вам не хватает {needMoney} руб. для оплаты покупки. Пожалуйста, пополните счет или удалите товары из корзины.</p>
-                  <Button
-                    className="no_money_buttons"
-                    variant="contained"
-                    color="primary"
-                    id={backToBasketButton.id}
-                    onClick={() => this.reset()}
-                  >
-                    {backToBasketButton.name}
-                  </Button>
-                  <Button
-                    className="goto_profile"
-                    component={linkToLogin}
-                    variant="contained"
-                    color="primary"
-                    id={gotoAccountButton.id}
-                  >
-                    {gotoAccountButton.name}
-                  </Button>
-                </div>
-              );
-            }
-            else
-              return (
-                <div className="basket_page">
-                  <div/>
-                  <div className="basket_container">
-                  <BasketList
-                    basketItems={basketItems}
-                    basketID={basketID}
-                    deliveryCost={deliveryCost}
-                    handleCounterClick={this.handleCounterClick}
-                    handleDeleteItem={this.handleDeleteItem}
-                  />
-                  <BasketContacts
-                    basketID={basketID}
-                    handleOrderClick={this.handleOrderClick}
-                    jwtToken={jwtToken}
-                  />
-                  </div>
-                  <div/>
-                </div>
-              );
+    else if (error) {
+      return <p>Ошибка: {error.message}</p>;
+    } else if (!basketLoaded) {
+      return (
+        <p className='load_info'>
+          Пожалуйста, подождите, идет загрузка страницы
+        </p>
+      );
+    } else if (
+      basketItems === undefined ||
+      basketItems.length === 0 ||
+      basketItems.cart_items === undefined ||
+      basketItems.cart_items.length === 0
+    ) {
+      return (
+        <div className='load_info'>
+          <div />
+          <p>Ваша корзина пуста</p>
+        </div>
+      );
+    } else if (noMoney) {
+      return (
+        <div className='no_money'>
+          <p>
+            Вам не хватает {needMoney} руб. для оплаты покупки. Пожалуйста,
+            пополните счет или удалите товары из корзины.
+          </p>
+          <Button
+            className='no_money_buttons'
+            variant='contained'
+            color='primary'
+            id={backToBasketButton.id}
+            onClick={() => this.reset()}
+          >
+            {backToBasketButton.name}
+          </Button>
+          <Button
+            className='goto_profile'
+            component={linkToLogin}
+            variant='contained'
+            color='primary'
+            id={gotoAccountButton.id}
+          >
+            {gotoAccountButton.name}
+          </Button>
+        </div>
+      );
+    } else
+      return (
+        <div className='basket_page'>
+          <div />
+          <div className='basket_container'>
+            <BasketList
+              basketItems={basketItems}
+              basketID={basketID}
+              deliveryCost={deliveryCost}
+              handleCounterClick={this.handleCounterClick}
+              handleDeleteItem={this.handleDeleteItem}
+            />
+            <BasketContacts
+              basketID={basketID}
+              handleOrderClick={this.handleOrderClick}
+              jwtToken={jwtToken}
+            />
+          </div>
+          <div />
+        </div>
+      );
   }
 }
