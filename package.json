@@ -16,7 +16,6 @@
     "build:w": "webpack --mode production -w",
     "dev": "NODE_ENV=development npm run wds",
     "dev-test": "concurrently \"NODE_ENV=development npm run wds\" \"npm run test:w\"",
-    "heroku-prebuild": "npm install --dev",
     "start": "concurrently \"webpack --watch --config webpack.dev.config.js\" \"webpack-dev-server --config webpack.dev.config.js\"",
     "test": "jest --coverage",
     "test:w": "jest --watchAll --coverage",
