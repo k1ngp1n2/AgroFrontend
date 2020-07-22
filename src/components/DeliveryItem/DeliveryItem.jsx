@@ -1,7 +1,7 @@
 import './DeliveryItem.scss';
 
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button/Button';
 import moment from 'moment';
 
@@ -38,3 +38,11 @@ export default function DeliveryItem(props) {
     </p>
   );
 }
+
+DeliveryItem.propTypes = {
+  // Пункты меню - массив объектов
+  // TODO написать структуру объекта
+  item: PropTypes.shape(),
+  // Функция отображения сведений о заказе
+  showOrderInfo: PropTypes.func,
+};

@@ -7,6 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { serverAddress } from 'constants/ServerAddress';
 import { login } from 'helpers/login';
@@ -31,6 +32,10 @@ export default class RegisterPage extends PureComponent {
       rememberLogin: false,
     };
   }
+
+  static propTypes = {
+    setToken: PropTypes.func,
+  };
 
   handleChange = event => {
     this.setState({

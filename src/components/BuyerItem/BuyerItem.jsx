@@ -1,7 +1,7 @@
 import './BuyerItem.scss';
 
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button/Button';
 import moment from 'moment';
 
@@ -38,3 +38,18 @@ export default function BuyerItem(props) {
     </p>
   );
 }
+BuyerItem.propTypes = {
+  // Пункты меню - массив объектов
+  item: PropTypes.shape({
+    // время заказа
+    date: PropTypes.string,
+    // общая стоимость заказа
+    total: PropTypes.string,
+    // состояние заказа
+    status: PropTypes.string,
+    // ссылка на заказ
+    link: PropTypes.string,
+  }),
+  // Функция отображения сведений о заказе
+  showOrderInfo: PropTypes.func,
+};

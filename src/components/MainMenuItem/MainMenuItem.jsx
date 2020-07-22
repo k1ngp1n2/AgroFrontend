@@ -3,7 +3,7 @@ import './MainMenuItem.scss';
 import React from 'react';
 import { Link } from 'react-router-dom';
 // Проверка свойств
-
+import PropTypes from 'prop-types';
 import Tab from '@material-ui/core/Tab';
 
 /**
@@ -22,3 +22,12 @@ export default function MainMenuItem(props) {
     />
   );
 }
+MainMenuItem.propTypes = {
+  // Пункты меню - массив объектов
+  item: PropTypes.shape({
+    // название пункта
+    name: PropTypes.string,
+    // адрес
+    path: PropTypes.string,
+  }),
+};

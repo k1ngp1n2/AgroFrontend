@@ -1,6 +1,7 @@
 import './ItemCard.scss';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -34,3 +35,17 @@ export default function ItemCard(props) {
     </Card>
   );
 }
+
+ItemCard.propTypes = {
+  // Описание товара - объект
+  item: PropTypes.shape({
+    // название товара
+    title: PropTypes.string,
+    // единица измерения товара
+    measures: PropTypes.string,
+    // цена товара
+    price: PropTypes.number,
+  }),
+  // Функция отображения информации о товаре
+  itemHandle: PropTypes.func,
+};

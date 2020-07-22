@@ -2,7 +2,7 @@ import './MainMenu.scss';
 
 import React from 'react';
 // Проверка свойств
-
+import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
 import MainMenuItem from 'components/MainMenuItem';
 
@@ -48,3 +48,10 @@ export default function MainMenu(props) {
     </Tabs>
   );
 }
+
+MainMenu.propTypes = {
+  // активный пункт меню
+  indicator: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  // функция выбора активного пункта меню
+  handleChange: PropTypes.func,
+};
