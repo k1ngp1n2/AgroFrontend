@@ -21,6 +21,11 @@
     "test:w": "jest --watchAll --coverage",
     "wds": "webpack-dev-server --config webpack.dev.config.js"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|scss|less)$": "identity-obj-proxy"
+    }
+  },
   "keywords": [
     "Ferm",
     "Products",
@@ -55,6 +60,7 @@
     "eslint-plugin-react": "^7.16.0",
     "file-loader": "^5.0.2",
     "history": "^4.10.1",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^25.1.0",
     "jest-enzyme": "^7.1.2",
     "mini-css-extract-plugin": "^0.9.0",
