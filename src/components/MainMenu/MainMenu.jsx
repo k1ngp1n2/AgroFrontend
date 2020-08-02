@@ -36,7 +36,7 @@ export default function MainMenu(props) {
   const { indicator, handleChange } = props;
   return (
     <Tabs
-      fullWidth
+      variant='fullWidth'
       className='main_menu'
       value={indicator}
       onChange={handleChange}
