@@ -1,13 +1,15 @@
 import './MainPage.scss';
 
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+
 import LeftMenu from 'components/LeftMenu';
 import SearchForm from 'components/SearchForm';
 import CatalogList from 'components/CatalogList';
 import CatalogItem from 'components/CatalogItem';
 import CatalogProducer from 'components/CatalogProducer';
+import Loading from 'components/Loading';
 import { serverAddress } from 'constants/ServerAddress';
-import PropTypes from 'prop-types';
 
 /**
  * Класс HomePage - компонент, отображающий главную страницу
@@ -186,11 +188,7 @@ export default class MainPage extends PureComponent {
     if (error) {
       return <p>Ошибка: {error.message}</p>;
     } else if (!menuLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else {
       let content;
       if (mode === 'catalogList') {

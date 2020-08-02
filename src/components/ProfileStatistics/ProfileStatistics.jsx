@@ -6,6 +6,7 @@ import MyOrdersIcon from '@material-ui/icons/DateRange';
 
 import { serverAddress } from 'constants/ServerAddress';
 import { seller, admin } from 'constants/AuthorizationTypes';
+import Loading from 'components/Loading';
 
 /**
  * Класс ProfileStatistics - компонент, отображающий статистику деятельности пользователя в системе FermaStore на странице личного кабинета
@@ -61,11 +62,7 @@ export default class ProfileStatistics extends PureComponent {
     if (error) {
       return <p>Ошибка: {error.message}</p>;
     } else if (!itemsLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else {
       if (statistics === undefined || statistics.length === 0) {
         return (

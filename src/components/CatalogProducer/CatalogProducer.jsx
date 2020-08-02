@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
 import { serverAddress } from 'constants/ServerAddress';
+import Loading from 'components/Loading';
 
 // Данные для кнопки Назад
 const backButton = { id: 'back', name: 'Назад' };
@@ -76,11 +77,7 @@ export default class CatalogProducer extends PureComponent {
     if (error) {
       return <p>CatalogProducer::Ошибка: {error.message}</p>;
     } else if (!producerLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else {
       const phone = 'tel:+7-' + catalogProducer.producer.phone;
       const mail = 'mailto:' + catalogProducer.producer.email;

@@ -2,7 +2,9 @@ import './BuyersPage.scss';
 
 import React, { PureComponent } from 'react';
 import Markdown from 'react-markdown';
+
 import { serverAddress } from 'constants/ServerAddress';
+import Loading from 'components/Loading';
 
 /**
  * Класс BuyersPage - компонент, отображающий страницу Покупателям
@@ -46,11 +48,7 @@ export default class BuyersPage extends PureComponent {
     if (error) {
       return <p>Ошибка: {error.message}</p>;
     } else if (!contentLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else {
       return (
         <div className='about_page'>

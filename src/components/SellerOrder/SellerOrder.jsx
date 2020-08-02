@@ -8,6 +8,7 @@ import moment from 'moment';
 import { serverAddress } from 'constants/ServerAddress';
 import Button from '@material-ui/core/Button/Button';
 import OrderStatus from 'components/OrderStatus';
+import Loading from 'components/Loading';
 
 // Данные для кнопки Передать заказ на доставку
 const orderDoneButton = {
@@ -114,11 +115,7 @@ export default class SellerOrder extends PureComponent {
     if (error) {
       return <p>Ошибка: {error.message}</p>;
     } else if (!itemsLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else {
       let needAcceptOrder = '';
       if (orderStatus === 'Упаковывается') {

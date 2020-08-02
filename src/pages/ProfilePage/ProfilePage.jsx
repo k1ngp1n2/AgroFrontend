@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import ProfileMenu from 'components/ProfileMenu';
 import ProfileContent from 'components/ProfileContent';
+import Loading from 'components/Loading';
 import { serverAddress } from 'constants/ServerAddress';
 import { buyer } from 'constants/AuthorizationTypes';
 
@@ -94,11 +95,7 @@ export default class ProfilePage extends PureComponent {
     if (error) {
       return <p>Ошибка: {error.message}</p>;
     } else if (!profileLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else
       return (
         <div className='seller_page'>

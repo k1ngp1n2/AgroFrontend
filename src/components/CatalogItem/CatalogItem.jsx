@@ -9,6 +9,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Fade from '@material-ui/core/Fade';
 
 import { serverAddress } from 'constants/ServerAddress';
+import Loading from 'components/Loading';
 
 // Данные для кнопки Добавить в корзину
 const addToBasketButton = { id: 'addItemToBasket', name: 'Добавить в корзину' };
@@ -129,11 +130,7 @@ export default class CatalogItem extends PureComponent {
     if (error) {
       return <p>CatalogItem::Ошибка: {error.message}</p>;
     } else if (!itemLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else {
       return (
         <div className='catalog_item'>

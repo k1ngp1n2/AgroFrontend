@@ -10,6 +10,7 @@ import NextPage from '@material-ui/icons/ChevronRight';
 import LastPage from '@material-ui/icons/LastPage';
 
 import { serverAddress } from 'constants/ServerAddress';
+import Loading from 'components/Loading';
 
 /**
  * Класс CatalogList - компонент, отображающий товары каталога на странице
@@ -222,11 +223,7 @@ export default class CatalogList extends PureComponent {
     if (error) {
       content = <p className='catalog_content'>Ошибка: {error.message}</p>;
     } else if (!itemsLoaded) {
-      content = (
-        <p className='load_info catalog_content'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      content = <Loading />;
     } else if (
       catalogItems === undefined ||
       catalogItems.length === 0 ||

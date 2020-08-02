@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 import { serverAddress } from 'constants/ServerAddress';
 import { buyer, seller } from 'constants/AuthorizationTypes';
+import Loading from 'components/Loading';
 
 // Данные для кнопки Пополнить счёт
 const addMoneyButton = {
@@ -74,11 +75,7 @@ export default class ProfileAccount extends PureComponent {
     if (error) {
       return <p>Ошибка: {error.message}</p>;
     } else if (!itemsLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else {
       let addMoney = '';
       if (userStatus === buyer || userStatus === seller) {

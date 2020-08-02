@@ -6,6 +6,7 @@ import MyOrdersIcon from '@material-ui/icons/DateRange';
 import PropTypes from 'prop-types';
 
 import { serverAddress } from 'constants/ServerAddress';
+import Loading from 'components/Loading';
 
 // Данные для кнопки Сохранить изменения
 const saveItemButton = {
@@ -160,11 +161,7 @@ export default class NewProduct extends PureComponent {
     if (error) {
       return <p>Ошибка: {error.message}</p>;
     } else if (!itemsLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else
       return (
         <div className='seller_items'>

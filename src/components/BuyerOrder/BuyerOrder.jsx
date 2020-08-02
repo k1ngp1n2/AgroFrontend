@@ -7,6 +7,7 @@ import moment from 'moment';
 
 import { serverAddress } from 'constants/ServerAddress';
 import OrderStatus from 'components/OrderStatus';
+import Loading from 'components/Loading';
 
 /**
  * Класс BuyerOrder - компонент, отображающий подробные сведения о заказе на странице покупателя
@@ -66,11 +67,7 @@ export default class BuyerOrder extends PureComponent {
     if (error) {
       return <p>Ошибка: {error.message}</p>;
     } else if (!itemsLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else {
       if (order.orders.length > 1)
         content = (

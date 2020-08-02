@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button/Button';
 import BasketList from 'components/BasketList';
 import BasketContacts from 'components/BasketContacts';
 import BasketFinish from 'components/BasketFinish';
+import Loading from 'components/Loading';
 import { serverAddress } from 'constants/ServerAddress';
 import { register } from 'helpers/register';
 import { login } from 'helpers/login';
@@ -236,11 +237,7 @@ export default class BasketPage extends PureComponent {
     else if (error) {
       return <p>Ошибка: {error.message}</p>;
     } else if (!basketLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else if (
       basketItems === undefined ||
       basketItems.length === 0 ||

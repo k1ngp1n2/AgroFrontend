@@ -14,6 +14,7 @@ import Footer from 'components/Footer';
 import HomePage from 'pages/HomePage';
 import BasketPage from 'pages/BasketPage';
 import LoginPage from 'pages/LoginPage';
+import Loading from 'components/Loading';
 // машрутизация сайта
 import routes from '../../routes';
 import { storageAvailable } from 'helpers/localStorage';
@@ -156,11 +157,7 @@ export default class App extends PureComponent {
     if (error) {
       return <p>Ошибка: {error.message}</p>;
     } else if (!basketCreated) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else {
       return (
         <MuiThemeProvider theme={theme}>

@@ -2,6 +2,8 @@ import './SellersPage.scss';
 
 import React, { PureComponent } from 'react';
 import Markdown from 'react-markdown';
+
+import Loading from 'components/Loading';
 import { serverAddress } from 'constants/ServerAddress';
 
 /**
@@ -46,11 +48,7 @@ export default class SellersPage extends PureComponent {
     if (error) {
       return <p>Ошибка: {error.message}</p>;
     } else if (!contentLoaded) {
-      return (
-        <p className='load_info'>
-          Пожалуйста, подождите, идет загрузка страницы
-        </p>
-      );
+      return <Loading />;
     } else {
       return (
         <div className='about_page'>
