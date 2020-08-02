@@ -3,7 +3,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 
-import Footer from '../src/components/Footer';
+import Loading from '.';
 
 let container = null;
 beforeEach(() => {
@@ -19,11 +19,11 @@ afterEach(() => {
   container = null;
 });
 
-it('renders right year in footer', () => {
+it('Loading показывает сообщение о загрузке', () => {
   act(() => {
-    render(<Footer />, container);
+    render(<Loading />, container);
   });
   expect(container.textContent).toBe(
-    `Ferma Store @ ${new Date().getFullYear()}`,
+    'Пожалуйста, подождите, идет загрузка страницы',
   );
 });
