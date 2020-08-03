@@ -62,3 +62,5 @@ typings/
 
 #tmp
 /tmp
+/dist/bundle.js
+/dist/main.css
