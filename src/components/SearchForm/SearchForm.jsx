@@ -28,7 +28,6 @@ export default class SearchForm extends PureComponent {
     onSend: PropTypes.func,
   };
 
-  // TODO Отправка запроса по нажатию Enter
   // обработка нажатий на клавиши
   onChange = event => {
     this.setState({
@@ -36,13 +35,21 @@ export default class SearchForm extends PureComponent {
       [event.target.name]: event.target.value,
     });
   };
-
+  handleEnter = event => {
+    if (
+      (event.key == 'Enter' || event.keyCode == 13) &&
+      this.state.item !== ''
+    ) {
+      const { onSend } = this.props;
+      // отправляем запрос
+      onSend(this.state.item);
+    }
+  };
   // обработка щелчков по кнопке
   handleClick = () => {
     if (this.state.item !== '') {
-      // получаем значение
       const { onSend } = this.props;
-
+      // отправляем запрос
       onSend(this.state.item);
     }
   };
@@ -58,6 +65,7 @@ export default class SearchForm extends PureComponent {
           name='item'
           id='search_row'
           onChange={this.onChange}
+          onKeyDown={this.handleEnter}
           value={item}
           placeholder=' '
         />
