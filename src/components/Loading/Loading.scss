@@ -1,4 +1,17 @@
+// Коэффициент перевода в em
+$k: 16;
+
 .loading {
   color: #558b2f;
   text-align: center;
+  height: 539rem / $k;
+  @media (max-width: 1280px) {
+    height: 804rem / $k;
+  }
+  @media (max-width: 960px) {
+    height: 1104rem / $k;
+  }
+  @media (max-width: 720px) {
+    height: 2144rem / $k;
+  }
 }
