@@ -28,9 +28,26 @@ header {
   width: 304px;
   @media (max-width: 1920px) {
     background-size: 215rem / $k 53rem / $k;
-    height: 53px;
-    width: 215px;
+    height: 53rem / $k;
+    width: 215rem / $k;
     margin-top: 12px;
+  }
+  @media (max-width: 1280px) {
+    background-size: 200rem / $k 53rem / $k;
+    height: 53rem / $k;
+    width: 200rem / $k;
+  }
+  @media (max-width: 960px) {
+    background-size: 150rem / $k 40rem / $k;
+    height: 40rem / $k;
+    width: 150rem / $k;
+    margin-top: 15px;
+  }
+  @media (max-width: 720px) {
+    background-size: 100rem / $k 25rem / $k;
+    height: 25rem / $k;
+    width: 100rem / $k;
+    margin-top: 20px;
   }
 }
 .menu_buttons {

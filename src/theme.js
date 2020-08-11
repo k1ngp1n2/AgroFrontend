@@ -1,34 +1,33 @@
-import {createMuiTheme} from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 
-// TODO Сделать адаптив для меньшего разрешения экрана, разобраться с @media, чтобы в хидере меню было 18px
+// TODO Сделать адаптив для меньшего разрешения экрана
 // Тема для Material-UI
 let theme = createMuiTheme({
   // Точки переход разрешения
   breakpoints: {
-    keys:
-      [
-        {
-          0: 'xs',
-        },
-        {
-          1: 'sm',
-        },
-        {
-          2: 'md',
-        },
-        {
-          3: 'lg',
-        },
-        {
-          4: 'xl',
-        },
-      ],
+    keys: [
+      {
+        0: 'xs',
+      },
+      {
+        1: 'sm',
+      },
+      {
+        2: 'md',
+      },
+      {
+        3: 'lg',
+      },
+      {
+        4: 'xl',
+      },
+    ],
     values: {
-      'xs': 0,
-      'sm': 960,
-      'md': 1280,
-      'lg': 1440,
-      'xl': 1920,
+      xs: 0,
+      sm: 960,
+      md: 1280,
+      lg: 1440,
+      xl: 1920,
     },
   },
   // Набор цветов (оттенки и их тени)
@@ -77,9 +76,7 @@ let theme = createMuiTheme({
     },
   },
   typography: {
-    fontFamily: [
-      'Roboto',
-    ],
+    fontFamily: ['Roboto'],
     // Размер шрифта по умолчанию
     fontSize: 18,
     useNextVariants: true,
@@ -114,11 +111,17 @@ export default theme = {
           minWidth: 80,
         },
         [theme.breakpoints.down('lg')]: {
-          fontSize: 13,
+          fontSize: 15,
         },
         [theme.breakpoints.down('md')]: {
-          fontSize: 12,
+          fontSize: 14,
           minWidth: 60,
+        },
+        [theme.breakpoints.down('sm')]: {
+          fontSize: 11,
+        },
+        [theme.breakpoints.down('xs')]: {
+          fontSize: 9,
         },
       },
       labelContainer: {
@@ -133,11 +136,17 @@ export default theme = {
           minWidth: 80,
         },
         [theme.breakpoints.down('lg')]: {
-          fontSize: 13,
+          fontSize: 15,
         },
         [theme.breakpoints.down('md')]: {
-          fontSize: 12,
+          fontSize: 14,
           minWidth: 60,
+        },
+        [theme.breakpoints.down('sm')]: {
+          fontSize: 11,
+        },
+        [theme.breakpoints.down('xs')]: {
+          fontSize: 9,
         },
       },
     },
@@ -151,11 +160,16 @@ export default theme = {
           fontSize: 18,
         },
         [theme.breakpoints.down('lg')]: {
-          fontSize: 13,
+          fontSize: 15,
         },
-
         [theme.breakpoints.down('md')]: {
-          fontSize: 12,
+          fontSize: 14,
+        },
+        [theme.breakpoints.down('sm')]: {
+          fontSize: 11,
+        },
+        [theme.breakpoints.down('xs')]: {
+          fontSize: 9,
         },
       },
     },
@@ -172,10 +186,19 @@ export default theme = {
         // Изменяем значения CSS для компонента
         backgroundColor: '#fff',
         [theme.breakpoints.down('xl')]: {
-          width: 340,
+          width: 300,
         },
         [theme.breakpoints.down('lg')]: {
           width: 238,
+        },
+        [theme.breakpoints.down('md')]: {
+          width: 230,
+        },
+        [theme.breakpoints.down('sm')]: {
+          width: 210,
+        },
+        [theme.breakpoints.down('xs')]: {
+          width: 180,
         },
       },
       padding: {
@@ -210,8 +233,17 @@ export default theme = {
           paddingLeft: 50,
         },
         [theme.breakpoints.down('lg')]: {
-          fontSize: 14,
+          fontSize: 15,
           paddingLeft: 30,
+        },
+        [theme.breakpoints.down('md')]: {
+          fontSize: 14,
+        },
+        [theme.breakpoints.down('sm')]: {
+          fontSize: 11,
+        },
+        [theme.breakpoints.down('xs')]: {
+          fontSize: 9,
         },
       },
     },
